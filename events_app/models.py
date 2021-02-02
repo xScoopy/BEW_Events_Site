@@ -19,9 +19,6 @@ class Event(db.Model):
     date_and_time = db.Column(db.DateTime, nullable=False)
     guests = db.relationship("Guest", secondary="guest_event", back_populates = "events_attending")
 
-# TODO: Create a table `guest_event_table` with the following columns:
-# - book_id: Integer column (foreign key)
-# - genre_id: Integer column (foreign key)
 
 guest_event_table = db.Table('guest_event',
     db.Column('guest_id', db.Integer, db.ForeignKey('guest.id')),
