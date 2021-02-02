@@ -26,7 +26,8 @@ def event_detail(event_id):
     """Show a single event."""
     # TODO: Get the event with the given id and send to the template
     event = Event.query.filter_by(id=event_id).one()
-    return render_template('event_detail.html', event=event)
+    date_time = str(event.date_and_time).split(" ")
+    return render_template('event_detail.html', event=event, date = date_time)
 
 
 @main.route('/event/<event_id>', methods=['POST'])
@@ -51,6 +52,8 @@ def rsvp(event_id):
         # add the event to their events_attending, then commit to the database
         new_guest = Guest(name=guest_name, email = guest_email, phone = guest_phone)
         new_guest.events_attending.append(event)
+        db.session.add(new_guest)
+        db.session.commit()
     
     flash('You have successfully RSVP\'d! See you there!')
     return redirect(url_for('main.event_detail', event_id=event_id))
@@ -74,7 +77,7 @@ def create():
 
         # TODO: Create a new event with the given title, description, & 
         # datetime, then add and commit to the database
-        new_event = Event(title=new_event_title, description = new_event_description, date = date, time = time)
+        new_event = Event(title=new_event_title, description = new_event_description, date_and_time = date_and_time)
         db.session.add(new_event)
         db.session.commit()
         flash('Event created.')

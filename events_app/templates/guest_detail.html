@@ -15,13 +15,12 @@
 <p><strong>Phone:</strong> {{guest.phone}}</p>
 
 <h2>Events Attending:</h2>
-
 <ul>
-    {% if guest.events_attending %}
+    
     {% for event in guest.events_attending %}
-    <li><a href="/event/{{event.id}}">{{event.name}}</a></li>
+    <li><a href="/event/{{ event.id }}">{{ event.title }}</a></li>
     {% endfor %}
-    {% endif %}
+    
 </ul>
 
 {% endblock %}

@@ -13,10 +13,10 @@
 
 <p>{{event.description}}</p>
 
-<p><strong>Date:</strong> {{event.date}}</p>
-<p><strong>Time:</strong> {{event.time}}</p>
+<p><strong>Date:</strong> {{date[0]}}</p>
+<p><strong>Time:</strong> {{date[1]}}</p>
 
-<p><strong>Number of Guests:</strong> {{event.len(guests)}}</p>
+<p><strong>Number of Guests:</strong> {{ event.guests|length}}</p>
 {% endif %}
 <form method="POST">
     <fieldset>
