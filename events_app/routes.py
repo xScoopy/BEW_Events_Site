@@ -33,19 +33,24 @@ def event_detail(event_id):
 def rsvp(event_id):
     """RSVP to an event."""
     # TODO: Get the event with the given id from the database
+    event = Event.query.filter_by(id=event_id).one()
     is_returning_guest = request.form.get('returning')
     guest_name = request.form.get('guest_name')
 
     if is_returning_guest:
         # TODO: Look up the guest by name, and add the event to their 
         # events_attending, then commit to the database
-        pass
+        guest_update = Guest.query.filter_by(name=guest_name).one()
+        guest_update.events_attending.append(event)
+        db.session.add(guest_update)
+        db.session.commit()
     else:
         guest_email = request.form.get('email')
         guest_phone = request.form.get('phone')
         # TODO: Create a new guest with the given name, email, and phone, and 
         # add the event to their events_attending, then commit to the database
-        pass
+        new_guest = Guest(name=guest_name, email = guest_email, phone = guest_phone)
+        new_guest.events_attending.append(event)
     
     flash('You have successfully RSVP\'d! See you there!')
     return redirect(url_for('main.event_detail', event_id=event_id))
@@ -69,7 +74,9 @@ def create():
 
         # TODO: Create a new event with the given title, description, & 
         # datetime, then add and commit to the database
-
+        new_event = Event(title=new_event_title, description = new_event_description, date = date, time = time)
+        db.session.add(new_event)
+        db.session.commit()
         flash('Event created.')
         return redirect(url_for('main.index'))
     else:
@@ -79,4 +86,6 @@ def create():
 @main.route('/guest/<guest_id>')
 def guest_detail(guest_id):
     # TODO: Get the guest with the given id and send to the template
-    return render_template('guest_detail.html')
+    guest_info = Guest.query.filter_by(id=guest_id).one()
+
+    return render_template('guest_detail.html', guest = guest_info)
