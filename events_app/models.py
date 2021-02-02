@@ -14,7 +14,7 @@ class Guest(db.Model):
     email = db.Column(db.String(40), nullable=False)
     plus_one = db.Column(db.String(55), nullable=True)
     phone = db.Column(db.String(15), nullable=False)
-    events_attending = db.relationship("Event", secondary="guest_event_link")
+    events_attending = db.relationship("Event", secondary="guest_event", back_populates="guests")
 
 class Event(db.Model):
     """Class Event represents the event table in our SQL database."""
@@ -24,12 +24,12 @@ class Event(db.Model):
     description = db.Column(db.String(140), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.DateTime, nullable=False)
-    guests = db.relationship("Guest", secondary="guest_event_link")
+    guests = db.relationship("Guest", secondary="guest_event", back_populates = "events_attending")
 
 # TODO: Create a table `guest_event_table` with the following columns:
 # - book_id: Integer column (foreign key)
 # - genre_id: Integer column (foreign key)
 
-guest_event_table = db.Table('guest_event_table',
+guest_event_table = db.Table('guest_event',
     db.Column('guest_id', db.Integer, db.ForeignKey('guest.id')),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id')))
